@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+  <div class="logo">
+    <img src="logo.jpg" alt="">
+  </div>
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search Products..."
+            onkeydown="handleSearchKey(event)"
+        >
+
+        <button onclick="searchProduct()">
+            Search
+        </button>
+
+        <button
+            id="clearSearch"
+            onclick="clearSearch()"
+        >
+            Clear
+        </button>
+
+    </div>
+
+<nav class="menu">
+<a href="#" onclick="show('home')">Home</a>
+<a href="#" onclick="show('makeup')">Makeup</a>
+<a href="#" onclick="show('skincare')">Skincare</a>
+<a href="#" onclick="show('haircare')">Haircare</a>
+<a href="#" onclick="show('login')">Login</a>
+<a href="#" class="cart-link" onclick="showCart()">🛒 Cart <span id="cartCount">0</span></a>
+</nav>
+</header>
+
+<!--search-->
+
+<section id="searchResults">
+
+    <h1 class="main-heading">
+        SEARCH RESULTS
+    </h1>
+
+    <p id="searchMessage"></p>
+
+    <div
+        class="products"
+        id="searchProducts"
+    >
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PRODUCT DETAILS
+     Click any product card / Buy Now button to open this page
+========================================================= -->
+
+<section id="productDetail">
+
+    <button class="product-back" onclick="show('makeup')">
+        ← Back to Products
+    </button>
+
+    <div class="product-detail-layout">
+
+        <!-- LEFT: PRODUCT IMAGE -->
+        <div class="product-gallery">
+
+            <img id="detailMainImage"
+                 class="detail-main-image"
+                 src=""
+                 alt="Product Image">
+
+            <div id="detailShades" class="shades-container">
+
+    <div class="shade-circle shade-1 selected"
+         data-image="lipstick 1.jpg"
+         title="Shade 1"></div>
+
+    <div class="shade-circle shade-2"
+         data-image="lipstick-shade-2.jpg"
+         title="Shade 2"></div>
+
+    <div class="shade-circle shade-3"
+         data-image="lipstick-shade-3.jpg"
+         title="Shade 3"></div>
+
+    <div class="shade-circle shade-4"
+         data-image="lipstick-shade-4.jpg"
+         title="Shade 4"></div>
+
+    <div class="shade-circle shade-5"
+         data-image="lipstick-shade-5.jpg"
+         title="Shade 5"></div>
+
+</div>
+
+        </div>
+
+
+        <!-- RIGHT: PRODUCT INFORMATION -->
+        <div class="product-detail-info">
+
+            <h1 id="detailProductName" class="detail-product-name">
+                Product Name
+            </h1>
+
+            <div class="detail-price-row">
+
+                <span id="detailOldPrice"
+                      class="detail-old-price">
+                </span>
+
+                <span id="detailCurrentPrice"
+                      class="detail-current-price">
+                </span>
+
+                <span id="detailDiscount"
+                      class="detail-discount">
+                </span>
+
+            </div>
+
+        
+
+            <div id="detailRating" class="detail-rating">
+                ★★★★★ <span>(5.0)</span>
+            </div>
+
+
+            <p id="detailStock" class="detail-stock">
+                In stock
+            </p>
+
+
+            <!-- QUANTITY + ADD TO CART -->
+            <div class="detail-cart-row">
+
+                <div class="detail-quantity">
+
+                    <button type="button"
+                            onclick="changeDetailQuantity(-1)">
+                        −
+                    </button>
+
+                    <input type="number"
+                           id="detailQuantity"
+                           value="1"
+                           min="1">
+
+                    <button type="button"
+                            onclick="changeDetailQuantity(1)">
+                        +
+                    </button>
+
+                </div>
+
+
+                <button class="detail-add-cart"
+                        onclick="addDetailToCart()">
+                    Add to cart
+                </button>
+
+            </div>
+
+
+            <!-- PRODUCT META -->
+            <div class="detail-info-box">
+
+                <h3>
+                    RECOMMENDED FOR -
+                    <span id="detailRecommended">
+                        BEAUTY / DAILY USE
+                    </span>
+                </h3>
+
+                <h3>
+                    SKIN TYPE -
+                    <span id="detailSkinType">
+                        ALL
+                    </span>
+                </h3>
+
+                <br>
+
+                <p>
+                    SKU:
+                    <span id="detailSKU"></span>
+                </p>
+
+                <p>
+                    Category:
+                    <span id="detailCategory"></span>
+                </p>
+
+                <p>
+                    Tags:
+                    <span id="detailTags">
+                        beauty product, cosmetic product,
+                        skin care product
+                    </span>
+                </p>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+            <p id="detailDescription"
+               class="detail-description">
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CART -->
+<section id="cart">
+    <div class="checkout-header">
+        <button class="product-back" onclick="show('home')">← Continue Shopping</button>
+        <h1 class="main-title">YOUR CART</h1>
+    </div>
+
+    <div id="cartEmpty" class="empty-cart">
+        <div class="empty-cart-icon">🛒</div>
+        <h2>Your cart is empty</h2>
+        <p>Add a product to your cart to continue.</p>
+        <button class="checkout-btn" onclick="show('makeup')">Shop Products</button>
+    </div>
+
+    <div id="cartContent" class="cart-content">
+        <div id="cartItems"></div>
+        <div class="cart-summary">
+            <h2>Order Summary</h2>
+            <div class="summary-row"><span>Subtotal</span><strong id="cartSubtotal">₹0</strong></div>
+            <div class="summary-row"><span>Delivery</span><strong>FREE</strong></div>
+            <div class="summary-total"><span>Total</span><strong id="cartTotal">₹0</strong></div>
+            <button class="checkout-btn" onclick="showCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+</section>
+
+<!-- CHECKOUT -->
+<section id="checkout">
+    <div class="checkout-header">
+        <button class="product-back" onclick="showCart()">← Back to Cart</button>
+        <h1 class="main-title">CHECKOUT</h1>
+    </div>
+
+    <div class="checkout-layout">
+        <form id="checkoutForm" class="checkout-form" onsubmit="placeOrder(event)">
+            <h2>Delivery Details</h2>
+            <input id="customerName" type="text" placeholder="Full Name" required>
+            <input id="customeremail id" type="text" placeholder="Email ID" required>
+            <input id="customerPhone" type="tel" placeholder="Mobile Number" pattern="[0-9]{10}" maxlength="10" required>
+            <textarea id="customerAddress" placeholder="Full Delivery Address" required></textarea>
+            <input id="customerCity" type="text" placeholder="City" required>
+            <input id="customerPincode" type="text" placeholder="Pincode" pattern="[0-9]{6}" maxlength="6" required>
+
+            <h2>Payment Method</h2>
+            <label class="payment-option">
+                <input type="radio" name="payment" value="Cash on Delivery" checked>
+                Cash on Delivery
+            </label>
+            <label class="payment-option">
+                <input type="radio" name="payment" value="UPI / Card" onchange="handlePaymentMethod()">
+                UPI / Card
+            </label>
+
+            <button type="submit" class="place-order-btn">Continue</button>
+        </form>
+
+        <div class="checkout-order-summary">
+            <h2>Order Summary</h2>
+            <div id="checkoutItems"></div>
+            <div class="summary-total"><span>Total</span><strong id="checkoutTotal">₹0</strong></div>
+        </div>
+    </div>
+</section>
+
+<!-- PAYMENT DETAILS -->
+<section id="paymentDetails">
+    <div class="checkout-header">
+        <button class="product-back" onclick="showCheckout()">← Back to Checkout</button>
+        <h1 class="main-title">PAYMENT DETAILS</h1>
+    </div>
+
+    <div class="payment-page">
+        <form id="paymentForm" class="checkout-form" onsubmit="confirmOnlinePayment(event)">
+            <h2 id="onlinePaymentTitle">UPI / Card Payment</h2>
+
+            <div class="online-pay-tabs">
+                <label class="pay-tab"><input type="radio" name="onlineType" value="UPI" checked onchange="toggleOnlinePayment()"> UPI</label>
+                <label class="pay-tab"><input type="radio" name="onlineType" value="Card" onchange="toggleOnlinePayment()"> Card</label>
+            </div>
+
+            <div id="upiFields">
+                <input id="upiId" type="text" placeholder="Enter UPI ID (example@upi)" required>
+                <p class="payment-note">Demo payment: no real money will be charged.</p>
+            </div>
+
+            <div id="cardFields" style="display:none;">
+                <input id="cardName" type="text" placeholder="Name on Card">
+                <input id="cardNumber" type="text" inputmode="numeric" maxlength="19" placeholder="Card Number (16 digits)">
+                <div class="card-row">
+                    <input id="cardExpiry" type="text" maxlength="5" placeholder="MM/YY">
+                    <input id="cardCvv" type="password" inputmode="numeric" maxlength="3" placeholder="CVV">
+                </div>
+            </div>
+
+            <button type="submit" class="place-order-btn">Pay & Confirm Order</button>
+        </form>
+
+        <div class="checkout-order-summary">
+            <h2>Order Summary</h2>
+            <div id="paymentItems"></div>
+            <div class="summary-total"><span>Total</span><strong id="paymentTotal">₹0</strong></div>
+        </div>
+    </div>
+</section>
+
+<!-- ORDER SUCCESS -->
+<section id="orderSuccess">
+    <div class="success-card">
+        <div class="success-icon">✓</div>
+        <h1>Order Successful!</h1>
+        <p>Thank you for shopping with BeautyGlow.</p>
+        <p class="order-number">Order ID: <strong id="orderNumber"></strong></p>
+        <p id="successPaymentText">Your order has been placed successfully.</p>
+        <div class="success-actions">
+            <button class="checkout-btn" onclick="show('orderTracking')">Track Order</button>
+            <button class="secondary-btn" onclick="show('home')">Continue Shopping</button>
+        </div>
+    </div>
+</section>
+
+<!-- ORDER TRACKING -->
+<section id="orderTracking">
+    <div class="checkout-header">
+        <button class="product-back" onclick="show('home')">← Continue Shopping</button>
+        <h1 class="main-title">ORDER TRACKING</h1>
+    </div>
+    <div class="tracking-card">
+        <h2>Order ID: <span id="trackingOrderId"></span></h2>
+        <p>Payment: <strong id="trackingPayment"></strong></p>
+        <p class="delivery-date">Expected Delivery: <strong id="trackingDeliveryDate"></strong></p>
+        <div class="tracking-steps">
+            <div class="track-step done"><span>✓</span><strong>Order Placed</strong><small>Order confirmed</small></div>
+            <div class="track-line"></div>
+            <div class="track-step active"><span>2</span><strong>Processing</strong><small>Preparing your order</small></div>
+            <div class="track-line"></div>
+            <div class="track-step"><span>3</span><strong>Shipped</strong><small>On the way</small></div>
+            <div class="track-line"></div>
+            <div class="track-step"><span>4</span><strong>Delivered</strong><small>Enjoy your beauty products</small></div>
+        </div>
+        <button class="checkout-btn" onclick="show('home')">Continue Shopping</button>
+    </div>
+</section>
+
+<!-- HOME -->
+
+<section id="home" class="active">
+
+<div class="hero">
+
+<h1>ONLINE STORE <br> BEAUTY ITEMS <br>
+<button class="btn" onclick="show('makeup')">Shop Now</button></h1>
+
+</div>
+
+</section>
+
+<!-- MAKEUP -->
+
+<section id="makeup">
+<center><div class="header-container">
+        <p class="subtitle">Makeup Collection</p>
+        <h1 class="main-title">Lipstick</h1></center>
+    </div>
+
+    <div class="products">
+<div class="card product-card"
+     data-name="lakme lipstick"
+          data-category="lipstick makeup"
+          data-shades='[
+       {"color":"#ff0a01","image":"lipstick 1.jpg"},
+       {"color":"#A34849","image":"lipstick-shade-2.jpg.jpg"},
+       {"color":"#8D1F23","image":"lipstick-shade-3.jpg"},
+       {"color":"#BD5344","image":"lipstick-shade-4.jpg"},
+       {"color":"#641F23","image":"lipstick-shade-5.jpg.jpg"}
+     ]'>
+
+    <img src="lipstick 1.jpg">
+    <center> <h3>LAKME LIPSTICK</h3></center>
+    <center><h2><p class="price">₹ 800</p></h2></center>
+
+  <button class="buy">Buy Now</button>
+</div>
+
+
+<div class="card product-card" 
+data-name="loreal paris lipstick" 
+data-category="lipstick makeup"
+      data-shades='[
+       {"color":"#F7879A","image":"Lipstick_2.jpg"},
+       {"color":"#ff0a01","image":"lipstick-shade-red.jpg"},
+       {"color":"#A34849","image":"lipstick-shade-brown.jpg"},
+       {"color":"#8D1F23","image":"lipstick-shade-maroon.jpg"},
+       {"color":"#641F23","image":"lipstick-shade-burgundy.jpg"}
+     ]'>
+
+
+<img src="Lipstick_2.jpg">
+<center><h3>LOREAL PARIS LIPSTICK</h3></center><BR>
+<center><h2><p class="price">₹ 356</h2></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="bobbi brown lipstick" 
+data-category="lipstick makeup"
+   data-shades='[
+       {"color":"#A34849","image":"Lipstick_3.jpg"},
+       {"color":"#ff0a01","image":"lipstick-shade-3.2.jpg"},
+       {"color":"#800080","image":"lipstick-shade-3.3.jpg"},
+       {"color":"#E75480","image":"lipstick-shade-3.4.jpg"},
+       {"color":"#FFE5B4","image":"lipstick-shade-3.5.jpg"}
+     ]'>
+
+
+<img src="Lipstick_3.jpg">
+<center><h3>BOBBI BROWN LIPSTICK</h3></center><br>
+<center><h2><p class="price">₹ 250</p></h2></center>                      
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="COLORBAR lipstick"
+ data-category="lipstick makeup"
+   data-shades='[
+       {"color":"#E75480","image":"Lipstick 4.jpg"},
+       {"color":"#ff0a01","image":"lipstick-shade-4.2.jpg"},
+       {"color":"#8D1F23","image":"lipstick-shade-4.3.jpg"},
+       {"color":"#800080","image":"lipstick-shade-4.4.jpg"},
+       {"color":"#D2042D","image":"lipstick-shade-4.5.jpg"}
+     ]'>
+
+<img src="lipstick 4.jpg">
+<center><h3>COLORBAR LIPSTICK</h1></center><br>
+<center><h2><p class="price">₹ 500</p></h2></center>         
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="MAYBELINE lipstick" 
+data-category="lipstick makeup"
+data-shades='[
+       {"color":"#E75480","image":"Lipstick 5.jpg"},
+       {"color":"#B47470","image":"lipstick-shade-5.2.jpg"},
+       {"color":"#9E5B5B","image":"lipstick-shade-5.3.jpeg"},
+       {"color":"#8B1A2B","image":"lipstick-shade-5.4.jpeg"},
+       {"color":"#4A1521","image":"lipstick-shade-5.5.jpeg"}
+     ]'>
+
+<img src="lipstick 5.jpg">
+<center><h3>MAYBELINE LIPSTICK</h3></center><br>
+<center><h2><p class="price">₹ 450</p><h2></center>         
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="loreal paris SUGAR lipstick" 
+data-category="lipstick makeup"
+data-shades='[
+       {"color":"#E75480","image":"Lipstick 6.jpg"},
+       {"color":"#C8816E","image":"lipstick-shade-6.2.jpeg"},
+       {"color":"#6F4251","image":"lipstick-shade-6.3.jpeg"},
+       {"color":"#9B5D43","image":"lipstick-shade-6.4.jpeg"},
+       {"color":"#C27B75","image":"lipstick-shade-6.5.jpeg"}
+     ]'
+>
+
+<img src="lipstick 6.jpg">
+<center><h3>LOREAL PARIS SUGAR LIPSTICK</h3></center><br>
+<center><h2><p class="price">₹ 550</p><h2></center>         
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="SUGAR LIQUID lipstick"
+ data-category="lipstick makeup"
+   data-shades='[
+       {"color":"#E75480","image":"Lipstick_7.jpg"},
+       {"color":"#F7879A","image":"lipstick-shade-7.2.jpg"},
+       {"color":"#A52A2A","image":"lipstick-shade-7.3.jpg"},
+       {"color":"#FF0000","image":"lipstick-shade-7.4.jpg"},
+       {"color":"#800000","image":"lipstick-shade-7.5.jpg"}
+     ]'>
+
+<img src="Lipstick_7.jpg">
+<center><h3>SUGAR LIQUID LIPSTICK</h3></center><br>
+<center><h2><p class="price">₹ 650</p><h2></center>         
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="SUGAR POP lipstick"
+ data-category="lipstick makeup"
+  data-shades='[
+       {"color":"#E75480","image":"Lipstick_8.jpg"},
+       {"color":"#FF0000","image":"lipstick-shade-8.2.jpg"},
+       {"color":"#FFE5B4","image":"lipstick-shade-8.3.jpg"},
+       {"color":"#A52A2A","image":"lipstick-shade-8.4.jpg"},
+       {"color":"#800000","image":"lipstick-shade-8.5.jpg"}
+     ]'>
+
+<img src="Lipstick_8.jpg">
+<center><h3>SUGAR POP LIPSTICK</h3></center><br>
+<center><h2><p class="price">₹ 700</p><h2></center>         
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="SUGAR PLAY lipstick" 
+data-category="lipstick makeup"
+ data-shades='[
+       {"color":"#E75480","image":"Lipstick_9.jpg"},
+       {"color":"#6B0F6A","image":"lipstick-shade-9.2.jpeg"},
+       {"color":"#B81D28","image":"lipstick-shade-9.3.jpg"},
+       {"color":"#85442A","image":"lipstick-shade-9.4.jpg"}
+     ]'>
+
+<img src="Lipstick_9.jpg">
+<center><h3>SUGAR PLAY LIPSTICK</h3></center><br>
+<center><h2><p class="price">₹ 500</p><h2></center>         
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="MAYBELINE LIQUID lipstick" 
+data-category="lipstick makeup"
+ data-shades='[
+       {"color":"#E75480","image":"Lipstick 10.jpg"},
+       {"color":"#7D2F54","image":"lipstick-shade-10.2.jpeg"},
+       {"color":"#9A2B2B","image":"lipstick-shade-10.3.jpeg"},
+       {"color":"#DA8264","image":"lipstick-shade-10.4.jpeg"},
+       {"color":"#824A33","image":"lipstick-shade-10.5.jpeg"}
+     ]'>
+
+<img src="Lipstick 10.jpg">
+<center><h3> MAYBELINE LIQUID LIPSTICK</h3></center><br>
+<center><h2><p class="price">₹ 600</p><h2></center>         
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="loreal LIQUID lipstick"
+data-category="lipstick makeup" data-shades='[
+       {"color":"#654321","image":"Lipstick_11.jpg"},
+       {"color":"#8C5350","image":"lipstick-shade-11.2.jpeg"},
+       {"color":"#D30015","image":"lipstick-shade-11.3.jpeg"},
+       {"color":"#E64A83","image":"lipstick-shade-11.4.jpeg"},
+       {"color":"#8B5A3D","image":"lipstick-shade-11.5.jpeg"}
+     ]'>
+
+<img src="Lipstick_11.jpg">
+<center><h3> LOREAL LIQUID LIPSTICK</h3></center><br>
+<center><h2><p class="price">₹ 700</p><h2></center>         
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card product-card" data-name="TRANSPARENT lipstick" 
+data-category="lipstick makeup"
+ data-shades='[
+       {"color":"#E1D9D1","image":"Lipstick 12.jpg"},
+       {"color":"#FFB6C1","image":"lipstick-shade-12.2.jpg"},
+       {"color":"#FF7F7F","image":"lipstick-shade-12.3.jpg"},
+       {"color":"#ADD8E6","image":"lipstick-shade-12.4.jpg"},
+       {"color":"#CBC3E3","image":"lipstick-shade-12.5.jpg"}
+     ]'>
+
+<img src="Lipstick 12.jpg">
+<center><h3>TRANSPARENT LIPSTICK</h3></center><br>     
+<center><h2><p class="price">₹ 800</p><h2></center>         
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+</div> <!-- End of Lipstick products -->
+
+<br><br>
+<center><div class="header-container">
+        <h1 class="main-title">FOUNDATION</h1></center>
+    </div>
+<br>
+
+<div class="products">
+
+    
+        <div class="card product-card" data-name="lakme 9 to 5 foundation"
+            data-category="foundation makeup">
+
+        <img src="foundation 1.jpg">
+        <center><h3>LAKME 9 TO 5 FOUNDATION</h3></center><br>
+        <center><h2><p class="price">₹ 650</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+      <div class="card product-card" data-name="LOREAL PARIS FOUNDATION"
+            data-category="foundation makeup">
+
+        <img src="foundation 2.jpg">
+        <center><h3>LOREAL PARIS FOUNDATION</h3></center><br>
+        <center><h2><p class="price">₹ 900</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="BOBBI BROWN FOUNDATION"
+            data-category="foundation makeup">
+
+        <img src="foundation 3.jpg">
+        <center><h3>BOBBI BROWN FOUNDATION</h3></center><br>
+        <center><h2><p class="price">₹ 899</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+  
+    <div class="card product-card" data-name="SUGAR FOUNDATION"
+            data-category="foundation makeup">
+
+        <img src="foundation 4.jpg">
+        <center><h3>SUGAR FOUNDATION</h3></center><br>
+        <center><h2><p class="price">₹ 799</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    
+    <div class="card product-card" data-name="COLORBAR FOUNDATION"
+            data-category="foundation makeup">
+
+        <img src="foundation.jpeg">
+        <center><h3>COLORBAR FOUNDATION</h3></center><br>
+        <center><h2><p class="price">₹ 1400</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    
+    <div class="card product-card" data-name="FIT ME FOUNDATION"
+            data-category="foundation makeup">
+
+        <img src="foundation 6.jpeg">
+        <center><h3>FIT ME FOUNDATION</h3></center><br>
+        <center><h2><p class="price">₹ 649</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+</div> <!-- End of FOUNDATION products -->
+
+<br><br>
+<center><div class="header-container">
+        <h1 class="main-title">COMPACT</h1></center>
+    </div>
+<br>
+
+<div class="products">
+
+    <div class="card product-card" data-name="LAKME compact"
+            data-category="compact makeup">
+
+        <img src="compact 1.jpeg">
+        <center><h3>LAKME COMPACT</h3></center><br>
+        <center><h2><p class="price">₹ 650</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+     <div class="card product-card" data-name="LOREAL PARIS compact"
+            data-category="compact makeup">
+
+        <img src="compact 2.jpeg">
+        <center><h3>LOREAL PARIS COMPACT</h3></center><br>
+        <center><h2><p class="price">₹ 900</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="BOOBI BROWN compact"
+            data-category="compact makeup">
+
+        <img src="compact 3.jpeg">
+        <center><h3>BOBBI BROWN COMPACT</h3></center><br>
+        <center><h2><p class="price">₹ 899</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+   <div class="card product-card" data-name="SUGAR compact"
+            data-category="compact makeup">
+
+        <img src="compact 4.jpg">
+        <center><h3>SUGAR COMPACT</h3></center><br>
+        <center><h2><p class="price">₹ 488</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+   <div class="card product-card" data-name="COLORBAR compact"
+            data-category="compact makeup">
+
+        <img src="compact 5.jpeg">
+        <center><h3>COLORBAR COMPACT</h3></center><br>
+        <center><h2><p class="price">₹ 499</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="FIT ME  compact"
+            data-category="compact makeup">
+
+        <img src="compact 6.jpeg">
+        <center><h3>FIT ME COMPACT</h3></center><br>
+        <center><h2><p class="price">₹ 577</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+
+</div>
+
+</div> <!-- End of COMPACT products --><br><br>
+
+<center><div class="header-container">
+        <h1 class="main-title">EYELINER</h1></center>
+    </div>
+<br>
+
+<div class="products">
+
+    <div class="card product-card" data-name="LAKME EYELINER"
+            data-category="EYELINER makeup">
+
+        <img src="eyeliner 1.jpg">
+        <center><h3>LAKME EYELINER</h3></center><br>
+        <center><h2><p class="price">₹ 899</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="LAKME EYELINER"
+            data-category="EYELINER makeup">
+
+        <img src="eyeliner 2.jpg">
+        <center><h3>FIT ME EYELINER</h3></center><br>
+        <center><h2><p class="price">₹ 599</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="MAYBELLINE EYELINER"
+            data-category="EYELINER makeup">
+
+        <img src="eyeliner 3.jpg">
+        <center><h3>LOREAL PARIS EYELINER</h3></center><br>
+        <center><h2><p class="price">₹ 650</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="BOBBI BROWN EYELINER"
+            data-category="EYELINER makeup">
+
+        <img src="eyeliner 4.jpg">
+        <center><h3>BOOBI BROWN EYELINER</h3></center><br>
+        <center><h2><p class="price">₹ 450</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="COLORBAR EYELINER"
+            data-category="EYELINER makeup">
+
+        <img src="eyeliner 5.jpg">
+        <center><h3>COLORBAR EYELINER</h3></center><br>
+        <center><h2><p class="price">₹ 750</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="SUGAR EYELINER"
+            data-category="EYELINER makeup">
+
+        <img src="eyeliner 6.jpg">
+        <center><h3>SUGAR EYELINER</h3></center><br>
+        <center><h2><p class="price">₹ 499</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    </div><!-- End of EYELINER products --><br><br>
+
+<center><div class="header-container">
+        <h1 class="main-title">LIPLINER</h1></center>
+    </div>
+<br>
+
+<div class="products">
+
+    <div class="card product-card" data-name="LAKME LIPLINER"
+            data-category="LIPLINER makeup">
+
+        <img src="lipliner 1.jpg">
+        <center><h3>LAKME LIPLINER</h3></center><br>
+        <center><h2><p class="price">₹ 499</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="FIT ME LIPLINER"
+            data-category="LIPLINER makeup">
+
+        <img src="lipliner 2.jpg">
+        <center><h3>FIT ME LIPLINER</h3></center><br>
+        <center><h2><p class="price">₹ 350</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="MAYBELLINE LIPLINER"
+            data-category="LIPLINER makeup">
+
+        <img src="lipliner 3.jpg">
+        <center><h3>LOREAL PARIS LIPLINER</h3></center><br>
+        <center><h2><p class="price">₹ 399</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="BOBBI BROWN LIPLINER"
+            data-category="LIPLINER makeup">
+
+        <img src="lipliner 4.jpg">
+        <center><h3>BOOBI BROWN LIPLINER</h3></center><br>
+        <center><h2><p class="price">₹ 299</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="COLORBAR LIPLINER"
+            data-category="LIPLINER makeup">
+
+        <img src="lipliner 5.jpg">
+        <center><h3>COLORBAR LIPLINER</h3></center><br>
+        <center><h2><p class="price">₹ 499</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="SUGAR LIPLINER"
+            data-category="LIPLINER makeup">
+
+        <img src="lipliner 6.jpg">
+        <center><h3>SUGAR LIPLINER</h3></center><br>
+        <center><h2><p class="price">₹ 599</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    </div><!-- End of LIPLINER products --><br><br>
+
+<center><div class="header-container">
+        <h1 class="main-title">BLUSH</h1></center>
+    </div>
+<br>
+
+<div class="products">
+
+    <div class="card product-card" data-name="LAKME BLUSH"
+            data-category="BLUSH makeup">
+
+        <img src="blush 1.jpg">
+        <center><h3>LAKME BLUSH</h3></center><br>
+        <center><h2><p class="price">₹ 799</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="FIT ME BLUSH"
+            data-category="BLUSH makeup">
+
+        <img src="blush 2.jpg">
+        <center><h3>FIT ME BLUSH</h3></center><br>
+        <center><h2><p class="price">₹ 899</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="LOREAL BLUSH"
+            data-category="BLUSH makeup">
+
+        <img src="blush 3.jpg">
+        <center><h3>LOREAL PARIS BLUSH</h3></center><br>
+        <center><h2><p class="price">₹ 550</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="BOBBI BROWN BLUSH"
+            data-category="BLUSH makeup">
+
+        <img src="blush 4.jpg">
+        <center><h3>BOOBI BROWN BLUSH</h3></center><br>
+        <center><h2><p class="price">₹ 300</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="COLORBAR BLUSH"
+            data-category="BLUSH makeup">
+
+        <img src="blush 5.jpg">
+        <center><h3>COLORBAR BLUSH</h3></center><br>
+        <center><h2><p class="price">₹ 799</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="SUGAR BLUSH"
+            data-category="BLUSH makeup">
+
+        <img src="blush 6.jpg">
+        <center><h3>SUGAR BLUSH</h3></center><br>
+        <center><h2><p class="price">₹ 325</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+</div><!-- End of BLUSH products --><br><br>
+
+<center><div class="header-container">
+        <h1 class="main-title">EYESHADOW</h1></center>
+    </div>
+<br>
+
+<div class="products">
+
+    <div class="card product-card" data-name="LAKME EYESHADOW"
+            data-category="EYESHADOW makeup">
+
+        <img src="eyeshadow 1.jpg">
+        <center><h3>LAKME EYESHADOW</h3></center><br>
+        <center><h2><p class="price">₹ 425</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="FIT ME EYESHADOW"
+            data-category="EYESHADOW makeup">
+
+        <img src="eyeshadow 4.jpg">
+        <center><h3>FIT ME EYESHADOW</h3></center><br>
+        <center><h2><p class="price">₹ 400</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="LOREAL EYESHADOW"
+            data-category="EYESHADOW makeup">
+
+        <img src="eyeshadow 2.jpg">
+        <center><h3>LOREAL PARIS EYESHADOW</h3></center><br>
+        <center><h2><p class="price">₹ 1200</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="BOBBI BROWN EYESHADOW"
+            data-category="EYESHADOW makeup">
+
+        <img src="eyeshadow 3.jpg">
+        <center><h3>BOOBI BROWN EYESHADOW</h3></center><br>
+        <center><h2><p class="price">₹ 500</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="COLORBAR EYESHADOW"
+            data-category="EYESHADOW makeup">
+
+        <img src="eyeshadow 5.jpg">
+        <center><h3>COLORBAR EYESHADOW</h3></center><br>
+        <center><h2><p class="price">₹ 800</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+    <div class="card product-card" data-name="SUGAR EYESHADOW"
+            data-category="EYESHADOW makeup">
+
+        <img src="eyeshadow 6.jpg">
+        <center><h3>SUGAR EYESHADOW</h3></center><br>
+        <center><h2><p class="price">₹ 650</p></h2></center>
+        <button class="buy"><h2>Buy Now</h2></button>
+    </div>
+
+
+</section>
+
+<!-- SKINCARE -->
+
+
+<section id="skincare">
+
+<center><div class="header-container">
+        <p class="subtitle">SKIN PRODUCT</p>
+        <h1 class="main-title">SKINCARE</h1></center>
+    </div>
+
+<div class="products">
+    
+
+<div class="card">
+<img src="skincare 1.jpg">
+<center><h3>The Gentleman Niacinamide <br> Face & Beard Wash</h3></center>
+<center><h1><p class="price">₹299</h1></p></center>
+<button class="buy"><h1>Buy Now</h1></button>
+</div>
+
+<div class="card">
+<img src="skincare 2.jpg">  
+<center><h3>Green Tea Oil Control <br> Face Wash</h3></center>
+<center><h1><p class="price">₹699</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+  
+<div class="card">
+<img src="skincare 3.jpg">  
+<center><h3>Plant-based AHA brightening face wash</h3></center>
+<center><h1><p class="price">₹699</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+<div class="card">
+<img src="skincare 4.jpg">  
+<center><h3>Niacinamide Oil Control Serum</h3></center>
+<center><h1><p class="price">₹799</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+<div class="card">
+<img src="skincare 5.jpg">  
+<center><h3>Hyaluronic Acid Hydrating Serum</h3></center>
+<center><h1><p class="price">₹899</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+<div class="card">
+<img src="skincare 6.jpg">  
+<center><h3>Lakmé 9To5 Vitamin C+ Facial Serum</h3></center>
+<center><h1><p class="price">₹699</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+</div>
+
+</section>
+
+<!-- HAIRCARE -->
+
+<section id="haircare">
+
+<center><div class="header-container">
+        <p class="subtitle">HAIRCARE</p>
+        <h1 class="main-title">SHAMPOO</h1>
+    </center>
+    </div>
+
+<div class="products">
+
+<div class="card">
+<img src="haircare 1.jpg">
+<center><h3>L’Oréal Paris L'Oreal Fall Resist 3X Anti-Hairfall Shampoo</h3></center>
+<center><h1><p class="price">₹299</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+<div class="card">
+<img src="haircare 2.jpg">  
+<center><h3>Plix Rosemary Anti-Hairfall Shampoo </h3></center>
+<center><h1><p class="price">₹699</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+  
+<div class="card">
+<img src="haircare 3.jpg">  
+<center><h3>Pilgrim Spanish Rosemary Anti-Hairfall Shampoo</h3></center>
+<center><h1><p class="price">₹699</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+
+
+</div><!-- End of shampoo products --><br><br>
+
+<center><div class="header-container">
+        <h1 class="main-title">HAIR CONDITIONER</h1></center>
+    </div>
+<br>
+
+       <div class="products">
+
+<div class="card">
+<img src="haircare 4.jpg">
+<center><h3>L'Oreal Paris Hair Conditioner for Dry Hair</h3></center>
+<center><h1><p class="price">₹615</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+
+<div class="card">
+<img src="haircare 5.jpg">  
+<center><h3>Rosemary Anti Hairfall plix Conditioner</h3></center>
+<center><h1><p class="price">₹400</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+  
+<div class="card">
+<img src="haircare 6.jpg">  
+<center><h3>Dove Conditioner Intense Repair</h3></center>
+<center><h1><p class="price">₹555</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+
+
+</div><!-- End of shampoo products --><br><br>
+
+<center><div class="header-container">
+        <h1 class="main-title">HAIR OIL</h1></center>
+    </div>
+<br>
+
+       <div class="products">
+
+<div class="card">
+<img src="haircare 7.jpg">
+<center><h3> L'Oréal Paris Extraordinary Oil Anti-Frizz Serum</h3></center>
+<center><h1><p class="price">₹194</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+
+<div class="card">
+<img src="haircare 8.jpg">  
+<center><h3>Vatika Naturals Nature Oil (Amla, Almond, Coconut & Olive)</h3></center>
+<center><h1><p class="price">₹250</h1></p></center>
+<button class="buy"><h2>Buy Now</h2></button>
+</div>
+
+<div class="card">
+<img src="haircare 9.jpg">  
+<center><h3>Mamaearth Rosemary Hair Growth Oil</h3></center>
+<center><h1><p class="price">₹254</h1></p></center>
+    <button class="buy"><h2>Buy now</h2></button>
+  </div>
+
+</section>
+
+<!-- LOGIN -->
+
+<section id="login">
+<center><div class="header-container">
+        <h1 class="main-title">LOGIN</h1></center>
+    </div><br>
+
+<form onsubmit="login(event)">
+
+<input type="text" placeholder="Username" required>
+
+<input type="password" placeholder="Password" required>
+
+<center><button type="submit" class="login-btn">LOGIN</button></center>
+</div>
+</form>
+
+</section>
+<br><br><br><br><br><br><br><br>
+<footer>
+
+<h3>© 2026 BeautyGlow Store | All Rights Reserved</h3>
+
+</footer>
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+/* =========================================================
+   GLOBAL PRODUCT DATA
+========================================================= */
+
+let currentProduct = null;
+
+
+/* =========================================================
+   SHOW SECTION
+========================================================= */
+
+function show(id) {
+
+    document
+        .getElementById("searchResults")
+        .classList.remove("active");
+
+    document
+        .querySelectorAll("section")
+        .forEach(function(section) {
+            section.classList.remove("active");
+        });
+
+    const selectedSection = document.getElementById(id);
+
+    if (selectedSection) {
+        selectedSection.classList.add("active");
+    }
+
+    window.scrollTo(0, 0);
+}
+
+
+/* =========================================================
+   PREPARE ALL PRODUCT CARDS
+   Your original file uses .product-card for makeup and
+   plain .card for skincare/haircare. We make all real
+   products work the same way without changing every card.
+========================================================= */
+
+function prepareProductCards() {
+
+    document
+        .querySelectorAll("#makeup .card, #skincare .card, #haircare .card")
+        .forEach(function(card) {
+
+            card.classList.add("product-card");
+
+            if (!card.hasAttribute("data-name")) {
+
+                const title = card.querySelector("h3");
+
+                if (title) {
+                    card.setAttribute(
+                        "data-name",
+                        title.innerText.trim()
+                    );
+                }
+            }
+
+            if (!card.hasAttribute("data-category")) {
+
+                const section = card.closest("section");
+
+                if (section) {
+
+                    let category = section.id;
+
+                    card.setAttribute(
+                        "data-category",
+                        category
+                    );
+                }
+            }
+        });
+}
+
+
+/* =========================================================
+   GET PRODUCT INFORMATION FROM A CARD
+========================================================= */
+
+function getProductFromCard(card) {
+
+    const image = card.querySelector("img");
+
+    const title = card.querySelector("h3");
+
+    const priceElement = card.querySelector(".price");
+
+    let price = "0";
+
+    if (priceElement) {
+
+        price =
+            priceElement.innerText
+                .replace(/[₹,\s]/g, "")
+                .trim();
+    }
+
+    const productName =
+        card.getAttribute("data-name") ||
+        (title ? title.innerText.trim() : "Product");
+
+
+    const category =
+        card.getAttribute("data-category") ||
+        "Beauty";
+
+
+    return {
+
+        name: productName,
+
+        price: price,
+
+        oldPrice: card.getAttribute("data-old-price") || "",
+
+        discount: card.getAttribute("data-discount") || "",
+
+        stock: card.getAttribute("data-stock") || "In stock",
+
+        category: category,
+
+        sku:
+            card.getAttribute("data-sku") ||
+            createSKU(productName),
+
+        image:
+            image
+                ? image.getAttribute("src")
+                : "",
+
+        description:
+            card.getAttribute("data-description") ||
+            "This is a premium beauty product from BeautyGlow. "
+            + "Explore the product details and add it to your cart.",
+
+        recommended:
+            card.getAttribute("data-recommended") ||
+            "BEAUTY / DAILY USE",
+
+        skinType:
+            card.getAttribute("data-skin-type") ||
+            "ALL",
+
+        tags:
+            card.getAttribute("data-tags") ||
+            "beauty product, cosmetic product, skin care product"
+    };
+}
+
+
+/* =========================================================
+   CREATE SIMPLE SKU IF ONE DOES NOT EXIST
+========================================================= */
+
+function createSKU(name) {
+
+    return "BG-" +
+        name
+            .replace(/[^a-zA-Z0-9]/g, "")
+            .substring(0, 6)
+            .toUpperCase();
+}
+
+
+/* =========================================================
+   OPEN PRODUCT DETAIL
+========================================================= */
+
+function openProduct(card) {
+
+    currentProduct =
+        getProductFromCard(card);
+
+       // GET SHADES FROM CURRENT PRODUCT
+let shades = [];
+
+try {
+    const shadeData = card.getAttribute("data-shades");
+
+    if (shadeData) {
+        shades = JSON.parse(shadeData);
+    }
+} catch (error) {
+    console.error("Shade JSON Error:", error);
+    shades = [];
+}
+
+const detailShades = document.getElementById("detailShades");
+
+detailShades.innerHTML = "";
+
+if (shades.length > 0) {
+
+    detailShades.style.display = "flex";
+
+shades.forEach(function(shadeData, index) {
+
+    const shade = document.createElement("div");
+
+    shade.className =
+        "shade-circle" +
+        (index === 0 ? " selected" : "");
+
+    shade.setAttribute(
+        "data-image",
+        shadeData.image
+    );
+
+    shade.setAttribute(
+        "title",
+        "Shade " + (index + 1)
+    );
+
+    // Actual shade COLOR
+    shade.style.backgroundColor = shadeData.color;
+
+    detailShades.appendChild(shade);
+});
+
+} else {
+
+    detailShades.style.display = "none";
+}
+        
+
+if (
+    currentProduct.category.toLowerCase().includes("lipstick")
+) {
+    detailShades.style.display = "flex";
+} else {
+    detailShades.style.display = "none";
+}
+
+
+    /* PRODUCT NAME */
+
+    document.getElementById(
+        "detailProductName"
+    ).innerText =
+        currentProduct.name;
+
+
+    /* CURRENT PRICE */
+
+    document.getElementById(
+        "detailCurrentPrice"
+    ).innerText =
+        "₹ " + currentProduct.price;
+
+
+    /* OLD PRICE */
+
+    const oldPrice =
+        document.getElementById(
+            "detailOldPrice"
+        );
+
+    if (currentProduct.oldPrice) {
+
+        oldPrice.innerText =
+            "₹ " + currentProduct.oldPrice;
+
+        oldPrice.style.display =
+            "inline";
+
+    } else {
+
+        oldPrice.innerText = "";
+
+        oldPrice.style.display =
+            "none";
+    }
+
+
+    /* DISCOUNT */
+
+    const discount =
+        document.getElementById(
+            "detailDiscount"
+        );
+
+    if (currentProduct.discount) {
+
+        discount.innerText =
+            "(" + currentProduct.discount + ")";
+
+        discount.style.display =
+            "inline";
+
+    } else {
+
+        discount.innerText = "";
+
+        discount.style.display =
+            "none";
+    }
+
+
+    /* STOCK */
+
+    document.getElementById(
+        "detailStock"
+    ).innerText =
+        currentProduct.stock === "In stock"
+            ? "In stock"
+            : currentProduct.stock + " in stock";
+
+
+    /* SKU */
+
+    document.getElementById(
+        "detailSKU"
+    ).innerText =
+        currentProduct.sku;
+
+
+    /* CATEGORY */
+
+    document.getElementById(
+        "detailCategory"
+    ).innerText =
+        currentProduct.category;
+
+
+    /* DESCRIPTION */
+
+    document.getElementById(
+        "detailDescription"
+    ).innerText =
+        currentProduct.description;
+
+
+    /* RECOMMENDED */
+
+    document.getElementById(
+        "detailRecommended"
+    ).innerText =
+        currentProduct.recommended;
+
+
+    /* SKIN TYPE */
+
+    document.getElementById(
+        "detailSkinType"
+    ).innerText =
+        currentProduct.skinType;
+
+
+    /* TAGS */
+
+    document.getElementById(
+        "detailTags"
+    ).innerText =
+        currentProduct.tags;
+
+
+    /* MAIN IMAGE */
+
+    document.getElementById(
+        "detailMainImage"
+    ).src =
+        currentProduct.image;
+
+
+  
+
+    /* RESET QUANTITY */
+
+    document.getElementById(
+        "detailQuantity"
+    ).value = 1;
+
+
+    /* SHOW PRODUCT DETAIL */
+
+    show("productDetail");
+}
+
+
+/* =========================================================
+   PRODUCT CARD CLICK
+========================================================= */
+
+document.addEventListener("click", function(event) {
+
+    const card = event.target.closest(".product-card");
+
+    if (!card) {
+        return;
+    }
+
+    // Shade click hoy to product card open na karo
+    if (event.target.classList.contains("shade-circle")) {
+        return;
+    }
+
+    openProduct(card);
+});
+
+/* =========================================================
+   SHADE IMAGE CHANGE
+========================================================= */
+
+document.addEventListener("click", function (event) {
+
+    const shade = event.target.closest(".shade-circle");
+
+    if (!shade) {
+        return;
+    }
+
+    // Get clicked shade image
+    const image = shade.getAttribute("data-image");
+
+    if (!image) {
+        return;
+    }
+
+    // Change MAIN PRODUCT IMAGE
+    const mainImage =
+        document.getElementById("detailMainImage");
+
+    if (mainImage) {
+        mainImage.src = image;
+    }
+
+    // Remove selected from all shades
+    document
+        .querySelectorAll("#detailShades .shade-circle")
+        .forEach(function (item) {
+            item.classList.remove("selected");
+        });
+
+    // Select clicked shade
+    shade.classList.add("selected");
+});
+
+/* =========================================================
+   THUMBNAIL IMAGE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target.classList.contains(
+                "detail-thumb"
+            )
+        ) {
+
+            const image =
+                event.target.getAttribute(
+                    "src"
+                );
+
+            document.getElementById(
+                "detailMainImage"
+            ).src = image;
+
+
+            document
+                .querySelectorAll(
+                    ".detail-thumb"
+                )
+                .forEach(function(thumb) {
+
+                    thumb.classList.remove(
+                        "active"
+                    );
+
+                });
+
+
+            event.target.classList.add(
+                "active"
+            );
+        }
+    }
+);
+
+
+/* =========================================================
+   DETAIL QUANTITY
+========================================================= */
+
+function changeDetailQuantity(amount) {
+
+    const input =
+        document.getElementById(
+            "detailQuantity"
+        );
+
+    let quantity =
+        parseInt(input.value) || 1;
+
+
+    quantity += amount;
+
+
+    if (quantity < 1) {
+        quantity = 1;
+    }
+
+
+    input.value =
+        quantity;
+}
+
+
+/* =========================================================
+   DETAIL ADD TO CART
+========================================================= */
+
+function addDetailToCart() {
+
+    if (!currentProduct) {
+        return;
+    }
+
+    const quantity =
+        Math.max(
+            1,
+            parseInt(document.getElementById("detailQuantity").value) || 1
+        );
+
+    let cart = getCart();
+
+    const existingIndex = cart.findIndex(function(item) {
+        return item.name === currentProduct.name && item.image === currentProduct.image;
+    });
+
+    if (existingIndex !== -1) {
+        cart[existingIndex].quantity += quantity;
+    } else {
+        cart.push({
+            name: currentProduct.name,
+            price: parseFloat(currentProduct.price) || 0,
+            image: currentProduct.image,
+            quantity: quantity
+        });
+    }
+
+    saveCart(cart);
+    updateCartCount();
+    showCart();
+}
+
+
+/* =========================================================
+   CART HELPERS
+========================================================= */
+
+function getCart() {
+    try {
+        return JSON.parse(localStorage.getItem("beautyGlowCart")) || [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveCart(cart) {
+    localStorage.setItem("beautyGlowCart", JSON.stringify(cart));
+}
+
+function updateCartCount() {
+    const cart = getCart();
+    const count = cart.reduce(function(total, item) {
+        return total + item.quantity;
+    }, 0);
+
+    const cartCount = document.getElementById("cartCount");
+    if (cartCount) {
+        cartCount.innerText = count;
+    }
+}
+
+function formatPrice(value) {
+    return "₹" + Number(value).toLocaleString("en-IN", {
+        maximumFractionDigits: 2
+    });
+}
+
+function getCartTotal() {
+    return getCart().reduce(function(total, item) {
+        return total + (Number(item.price) * Number(item.quantity));
+    }, 0);
+}
+
+function showCart() {
+    renderCart();
+    show("cart");
+}
+
+function renderCart() {
+    const cart = getCart();
+    const empty = document.getElementById("cartEmpty");
+    const content = document.getElementById("cartContent");
+    const itemsBox = document.getElementById("cartItems");
+
+    if (!cart.length) {
+        empty.style.display = "block";
+        content.style.display = "none";
+        return;
+    }
+
+    empty.style.display = "none";
+    content.style.display = "grid";
+    itemsBox.innerHTML = "";
+
+    cart.forEach(function(item, index) {
+        const row = document.createElement("div");
+        row.className = "cart-item";
+        row.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <div class="cart-item-info">
+                <h3>${item.name}</h3>
+                <p>${formatPrice(item.price)} each</p>
+                <div class="cart-quantity">
+                    <button type="button" onclick="changeCartQuantity(${index}, -1)">−</button>
+                    <span>${item.quantity}</span>
+                    <button type="button" onclick="changeCartQuantity(${index}, 1)">+</button>
+                </div>
+            </div>
+            <strong class="cart-item-total">${formatPrice(item.price * item.quantity)}</strong>
+            <button type="button" class="remove-cart" onclick="removeFromCart(${index})">Remove</button>
+        `;
+        itemsBox.appendChild(row);
+    });
+
+    const total = getCartTotal();
+    document.getElementById("cartSubtotal").innerText = formatPrice(total);
+    document.getElementById("cartTotal").innerText = formatPrice(total);
+    updateCartCount();
+}
+
+function changeCartQuantity(index, amount) {
+    const cart = getCart();
+
+    if (!cart[index]) {
+        return;
+    }
+
+    cart[index].quantity += amount;
+
+    if (cart[index].quantity < 1) {
+        cart[index].quantity = 1;
+    }
+
+    saveCart(cart);
+    renderCart();
+}
+
+function removeFromCart(index) {
+    const cart = getCart();
+    cart.splice(index, 1);
+    saveCart(cart);
+    renderCart();
+}
+
+function showCheckout() {
+    const cart = getCart();
+
+    if (!cart.length) {
+        showCart();
+        return;
+    }
+
+    renderCheckout();
+    show("checkout");
+}
+
+function renderCheckout() {
+    const cart = getCart();
+    const box = document.getElementById("checkoutItems");
+    box.innerHTML = "";
+
+    cart.forEach(function(item) {
+        const row = document.createElement("div");
+        row.className = "checkout-item";
+        row.innerHTML = `
+            <span>${item.name} × ${item.quantity}</span>
+            <strong>${formatPrice(item.price * item.quantity)}</strong>
+        `;
+        box.appendChild(row);
+    });
+
+    document.getElementById("checkoutTotal").innerText = formatPrice(getCartTotal());
+}
+
+function handlePaymentMethod() {
+    const selected = document.querySelector('input[name="payment"]:checked');
+    const btn = document.querySelector('#checkoutForm .place-order-btn');
+    if (btn) btn.innerText = selected && selected.value === 'UPI / Card' ? 'Continue to Payment' : 'Place Order';
+}
+
+function showPaymentDetails() {
+    renderPaymentSummary();
+    document.getElementById('paymentForm').reset();
+    toggleOnlinePayment();
+    show('paymentDetails');
+}
+
+function toggleOnlinePayment() {
+    const type = document.querySelector('input[name="onlineType"]:checked')?.value || 'UPI';
+    const upi = document.getElementById('upiFields');
+    const card = document.getElementById('cardFields');
+    const upiId = document.getElementById('upiId');
+    const cardInputs = [document.getElementById('cardName'), document.getElementById('cardNumber'), document.getElementById('cardExpiry'), document.getElementById('cardCvv')];
+    upi.style.display = type === 'UPI' ? 'block' : 'none';
+    card.style.display = type === 'Card' ? 'block' : 'none';
+    upiId.required = type === 'UPI';
+    cardInputs.forEach(input => input.required = type === 'Card');
+    document.getElementById('onlinePaymentTitle').innerText = type === 'UPI' ? 'UPI Payment' : 'Card Payment';
+}
+
+function renderPaymentSummary() {
+    const box = document.getElementById('paymentItems');
+    box.innerHTML = '';
+    getCart().forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'checkout-item';
+        row.innerHTML = `<span>${item.name} × ${item.quantity}</span><strong>${formatPrice(item.price * item.quantity)}</strong>`;
+        box.appendChild(row);
+    });
+    document.getElementById('paymentTotal').innerText = formatPrice(getCartTotal());
+}
+
+function createOrder(paymentMethod) {
+    const cart = getCart();
+    if (!cart.length) { showCart(); return; }
+    const orderId = 'BG' + Date.now().toString().slice(-8);
+    const order = {
+        id: orderId,
+        payment: paymentMethod,
+        total: getCartTotal(),
+        items: cart,
+        status: 'Processing',
+        date: new Date().toLocaleString('en-IN'),
+        deliveryDate: getExpectedDeliveryDate()
+    };
+    localStorage.setItem('beautyGlowLastOrder', JSON.stringify(order));
+    document.getElementById('orderNumber').innerText = orderId;
+    document.getElementById('trackingOrderId').innerText = orderId;
+    document.getElementById('trackingPayment').innerText = paymentMethod;
+    document.getElementById('trackingDeliveryDate').innerText = order.deliveryDate;
+    document.getElementById('successPaymentText').innerText = paymentMethod === 'Cash on Delivery' ? 'Your order has been placed successfully. Pay when the order is delivered.' : 'Payment successful and your order has been placed.';
+    localStorage.removeItem('beautyGlowCart');
+    updateCartCount();
+    document.getElementById('checkoutForm').reset();
+    show('orderSuccess');
+}
+
+function placeOrder(event) {
+    event.preventDefault();
+    const selected = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
+    if (selected === 'UPI / Card') {
+        showPaymentDetails();
+        return;
+    }
+    createOrder('Cash on Delivery');
+}
+
+function confirmOnlinePayment(event) {
+    event.preventDefault();
+    const type = document.querySelector('input[name="onlineType"]:checked')?.value || 'UPI';
+    if (type === 'UPI') {
+        const upi = document.getElementById('upiId').value.trim();
+        if (!/^[^\s@]+@[^\s@]+$/.test(upi)) { alert('Please enter a valid UPI ID.'); return; }
+    } else {
+        const number = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        const expiry = document.getElementById('cardExpiry').value.trim();
+        const cvv = document.getElementById('cardCvv').value.trim();
+        if (!/^\d{16}$/.test(number)) { alert('Please enter a valid 16-digit card number.'); return; }
+        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) { alert('Please enter expiry as MM/YY.'); return; }
+        if (!/^\d{3}$/.test(cvv)) { alert('Please enter a valid 3-digit CVV.'); return; }
+    }
+    createOrder(type + ' (Demo)');
+}
+
+function getExpectedDeliveryDate() {
+    const delivery = new Date();
+    delivery.setDate(delivery.getDate() + 5);
+    return delivery.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+function showTracking() {
+    const order = JSON.parse(localStorage.getItem('beautyGlowLastOrder') || 'null');
+    if (!order) { alert('No recent order found.'); return; }
+    document.getElementById('trackingOrderId').innerText = order.id;
+    document.getElementById('trackingPayment').innerText = order.payment;
+    document.getElementById('trackingDeliveryDate').innerText = order.deliveryDate || getExpectedDeliveryDate();
+    show('orderTracking');
+}
+
+/* =========================================================
+   CARD ADD / BUY BUTTON
+========================================================= */
+
+function addCard(button) {
+
+    const card =
+        button.closest(".product-card");
+
+    if (card) {
+        openProduct(card);
+    }
+}
+
+
+/* =========================================================
+   CARD ADD / BUY BUTTON
+========================================================= */
+
+function addCard(button) {
+
+    const card =
+        button.closest(".product-card");
+
+    if (card) {
+        openProduct(card);
+    }
+}
+
+
+/* =========================================================
+   SEARCH PRODUCT
+========================================================= */
+
+function searchProduct() {
+
+    prepareProductCards();
+
+
+    let searchText =
+        document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    if (searchText === "") {
+
+        alert(
+            "Please enter a product name!"
+        );
+
+        return;
+    }
+
+
+    let products =
+        document.querySelectorAll(
+            ".product-card"
+        );
+
+
+    let searchProducts =
+        document.getElementById(
+            "searchProducts"
+        );
+
+
+    let searchMessage =
+        document.getElementById(
+            "searchMessage"
+        );
+
+
+    searchProducts.innerHTML = "";
+
+
+    let foundProducts = 0;
+
+
+    products.forEach(
+        function(product) {
+
+            let productName =
+                (
+                    product.getAttribute(
+                        "data-name"
+                    ) || ""
+                ).toLowerCase();
+
+
+            let productCategory =
+                (
+                    product.getAttribute(
+                        "data-category"
+                    ) || ""
+                ).toLowerCase();
+
+
+            if (
+                productName.includes(
+                    searchText
+                ) ||
+
+                productCategory.includes(
+                    searchText
+                )
+            ) {
+
+                let clone =
+                    product.cloneNode(true);
+
+                searchProducts.appendChild(
+                    clone
+                );
+
+                foundProducts++;
+            }
+
+        }
+    );
+
+
+    document
+        .querySelectorAll("section")
+        .forEach(function(section) {
+
+            section.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    document
+        .getElementById(
+            "searchResults"
+        )
+        .classList.add(
+            "active"
+        );
+
+
+    document
+        .getElementById(
+            "clearSearch"
+        )
+        .style.display =
+        "inline-block";
+
+
+    if (foundProducts > 0) {
+
+        searchMessage.innerHTML =
+            foundProducts +
+            " product(s) found for: <b>" +
+            searchText.toUpperCase() +
+            "</b>";
+
+    } else {
+
+        searchMessage.innerHTML =
+            "❌ No product found for: <b>" +
+            searchText.toUpperCase() +
+            "</b>";
+    }
+
+
+    window.scrollTo(0, 0);
+}
+
+
+/* =========================================================
+   CLEAR SEARCH
+========================================================= */
+
+function clearSearch() {
+
+    document.getElementById(
+        "searchInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "searchProducts"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "searchMessage"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "clearSearch"
+    ).style.display = "none";
+
+
+    show("home");
+}
+
+
+/* =========================================================
+   ENTER KEY SEARCH
+========================================================= */
+
+function handleSearchKey(event) {
+
+    if (event.key === "Enter") {
+
+        searchProduct();
+    }
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function login(event) {
+
+    event.preventDefault();
+
+    alert(
+        "Login Successful!"
+    );
+
+    show("home");
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        prepareProductCards();
+        updateCartCount();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
